@@ -25,14 +25,14 @@ func init() {
 func TestEurekaHeartBeat(t *testing.T) {
 	err := eureka.HeartBeat()
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 }
 
 func TestEurekaUnRegistry(t *testing.T) {
 	err := eureka.Unregister()
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 
 }
@@ -40,12 +40,12 @@ func TestEurekaUnRegistry(t *testing.T) {
 func TestGetInstance(t *testing.T) {
 	app, err := eureka.GetApplication(serviceName)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 
 	json, err := json.Marshal(app)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 
 	t.Log(string(json))
@@ -62,7 +62,7 @@ func TestFegin(t *testing.T) {
 
 	listener, err := net.Listen("tcp", ":8082")
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 		return
 	}
 	defer listener.Close()
@@ -70,7 +70,7 @@ func TestFegin(t *testing.T) {
 	go func() {
 		err := http.Serve(listener, handler)
 		if err != nil && !strings.Contains(err.Error(), "use of closed network connection") {
-			t.Error(err)
+			t.Error(err.Error())
 			return
 		}
 	}()
@@ -79,7 +79,7 @@ func TestFegin(t *testing.T) {
 
 	app, err := eureka.GetApplication(serviceName)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 	feign.Append(*app)
 
@@ -87,7 +87,7 @@ func TestFegin(t *testing.T) {
 		Method: "GET",
 	})
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 
 	t.Log(response.Response.Status)
